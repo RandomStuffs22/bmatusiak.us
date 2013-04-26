@@ -21,7 +21,7 @@ module.exports = function(options, imports,welder) {
                     }
                 }
             }
-            
+            res.setHeader('Content-Type', 'text/html');
             res.end(compiledStartFile({
                 appConfig:appConfig,
                 isBuild:options.isBuild
