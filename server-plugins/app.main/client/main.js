@@ -14,7 +14,10 @@ define(function(require, exports, module) {
                         }
                         console.log($("#underLayer").height(),$("#underLayer")[0].scrollHeight);
                         $("#underLayer").append("<div>"+termData[currentTermItem]+"</div>");
-                        currentTermItem++;
+                        if(currentTermItem >= termData.length)
+                            currentTermItem = 0;
+                        else
+                            currentTermItem++;
                     }, 450);
                 }
             }
