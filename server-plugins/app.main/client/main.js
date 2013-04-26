@@ -19,7 +19,7 @@ define(function(require, exports, module) {
                         while(($("#underLayer")[0].scrollHeight) > $("#underLayer").height()){
                             $($("#underLayer div")[0]).remove();
                         }
-                        console.log($("#underLayer").height(),$("#underLayer")[0].scrollHeight);
+                        //console.log($("#underLayer").height(),$("#underLayer")[0].scrollHeight);
                         $("#underLayer").append("<div>"+termData[currentTermItem]+"</div>");
                         if(currentTermItem >= termData.length)
                             currentTermItem = 0;
