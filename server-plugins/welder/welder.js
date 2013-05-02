@@ -17,6 +17,15 @@ module.exports = function(options, imports, register) {
     clientExtensions.welder = __dirname + '/browser';
     var http = imports.http = require("./plugins/web.http/http.js")();
     
+    
+    http.app.use(function(req,res,next){
+        var host = req.headers.host.indexOf("www.");
+        if(host == "0"){
+            res.redirect("//"+req.headers.host.replace("www.","")+req.originalUrl);
+        }else
+        next();
+    });
+        
     function _StaticFiles(){
         var Path,mount,name;
         for (name in staticMountPaths) {
@@ -44,18 +53,25 @@ module.exports = function(options, imports, register) {
         console.log("Static Mounted",mount,"=",dir);
     }
     
+    
+    var __RequestParsers = [];
     function _RequestParsers(){
         //every thing under there gets cookies and session data
         http.app.use(http.express.bodyParser());
         http.app.use(http.express.cookieParser(options.clientSecret));
         
+        for (var i in __RequestParsers) {
+            __RequestParsers[i](http);
+        } 
+        console.log("_RequestParsers done");
     }
     
-    var __Middlewares = {};
+    var __Middlewares = [];
     function _Middlewares(){
         for(var i in __Middlewares){
-            http.app.use(__Middlewares[i](http.app));
+            __Middlewares[i](http);
         }
+        console.log("_Middlewares done");
     }
     
     var onListenRoutes;
@@ -91,6 +107,7 @@ module.exports = function(options, imports, register) {
                     include: includes,
                     excludeShallow:[],
                     name: 'welder/welder',
+                    //dir:out,
                     out: out,
                     logLevel: 0,
                 };
@@ -109,8 +126,8 @@ module.exports = function(options, imports, register) {
                     return contents;
                 };
             
-                config.optimize = "none";
-                //config.optimize = "uglify";
+                //config.optimize = "none";
+                config.optimize = "uglify";
                 
                 config.optimizeAllPluginResources = true;
                 
@@ -182,7 +199,7 @@ module.exports = function(options, imports, register) {
                 console.log(e);
             }
         },
-        addPlugin:function(clientExtPath,routeName){
+        addPlugin:function(clientExtPath){
             if(typeof clientExtPath == "string")
                 pluginsInit.push({name:clientExtPath});
             else if(typeof clientExtPath == "object")
@@ -195,16 +212,21 @@ module.exports = function(options, imports, register) {
             http.app.use(mount, http.express.static(dir));
             console.log("Static Mounted",mount,"=",dir);
         },
-        addRoute:function(routeName){
-            if(routeName)
-                indexRoutes.push(routeName);
+        addMiddleWare:function(fn){
+            __Middlewares.push(fn);
         },
-        addMiddleWare:function(name,fn){
-            __Middlewares[name]=fn;
-        }
+        addRequestParser:function(fn){
+            __RequestParsers.push(fn);
+        },
     };
     
-    onListenRoutes = require("./lib/routes.js")(options,imports,welder);
-    
-    register(null,{"welder": welder});
+    require("./lib/routes.js")(options,imports,welder,function(router){
+        welder.addRoute = router.addRoute;
+        welder.routeCheck = router.routeCheck;
+        onListenRoutes = router.listen;
+        
+        welder.jquery = router.jquery;
+            
+        register(null,{"welder": welder});
+    });
 };

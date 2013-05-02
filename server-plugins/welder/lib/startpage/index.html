@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
+        <%- head %>
         <% if(locals.isBuild){ %>
         <script src="/static/client.js"></script>
         <script>
@@ -13,6 +14,7 @@
         <script async="true">
             window.appConfig = JSON.parse('<%- JSON.stringify(appConfig) %>');
             window.appConfig.waitSeconds = 0;
+            window.appConfig.pageCode = Number('<%- JSON.stringify(pageCode) %>');
             require(window.appConfig, ["welder/welder"], function(welder) {
                 welder.setup(window.appConfig,function(){
                     //done
@@ -20,41 +22,8 @@
             });
         </script>
         <% } %>
-        <link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
     </head>
     <body>
-    
-        <style>
-            body{
-                color:white;
-                background-color:black;
-            }
-            #underLayer{
-                background-color:black;
-                color:green;
-                position:fixed;
-                left:0;
-                right:0;
-                top:0;
-                bottom:0;
-                z-index: -1;
-                overflow:hidden;
-                font-family: 'Press Start 2P', cursive;
-                font-size: 10px;
-                line-height: 10px;
-            }
-        </style>
-        <div id="underLayer">
-            
-        </div>
-        <div id="mainpage">
-            <div style="text-align:center">
-                <strong>Bradley Matusiak</strong><br /><br />
-                Javascript App Developer<br /><br />
-                
-                brad@bmatusiak.us
-            </div>
-        </div>
-        
+    <%- body %>
     </body>
 </html>

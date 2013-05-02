@@ -9,7 +9,10 @@
             "main"
         ],
         "consumes":[
-            "welder"
+            "welder",
+            "db-mongoose",
+            "db-mongoose-session",
+            "db-mongoose-counter"
         ]
     },
     "client":{
