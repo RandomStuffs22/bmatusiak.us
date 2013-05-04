@@ -17,15 +17,15 @@ module.exports = function(options, imports, register) {
     clientExtensions.welder = __dirname + '/browser';
     var http = imports.http = require("./plugins/web.http/http.js")();
     
-    
+    /*
     http.app.use(function(req,res,next){
-        var host = req.headers.host.indexOf("www.");
-        if(host == "0"){
-            res.redirect("//"+req.headers.host.replace("www.","")+req.originalUrl);
-        }else
+        //var host = req.headers.host.indexOf("www.");
+        //if(host == "0"){
+            //res.redirect("//"+req.headers.host.replace("www.","")+req.originalUrl);
+        //}else
         next();
     });
-        
+      */  
     function _StaticFiles(){
         var Path,mount,name;
         for (name in staticMountPaths) {
