@@ -2,10 +2,7 @@
 module.exports = function(options,imports){
     var MongooseSession = imports["db-mongoose-session"];
     
-    var cookieDomain;
-    if(process.env.MONGOLAB_URI){cookieDomain="opennetwork.io"}else{cookieDomain="shcdn.biz"}
-        
-    imports.welder.addRequestParser(function(http){
+    return function(http){
          http.app.use(http.express.session(
             {
                 key: 'onio.id',   
@@ -13,11 +10,10 @@ module.exports = function(options,imports){
                 store: MongooseSession,
                 cookie: {
                     path: '/',
-                    domain: '.'+cookieDomain,
                     httpOnly: true,
                     maxAge: 1000 * 60 * 60 * 24 //one year(ish)  
                 }
             }
         ));
-    });
+    };
 };

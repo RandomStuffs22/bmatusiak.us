@@ -1,49 +1,23 @@
 "use strict";
-var ejs = require("ejs");
 var path = require("path");
 var fs = require("fs");
 
 var isNodeWebkit = (typeof process == "object") && process.versions && process.versions['node-webkit'];
                     
 module.exports = function(options, imports, register) {
-    imports.ejs = ejs;
-    var staticPath = "/static";
-    var welder;
-    var clientExtensions = {};
-    var staticMountPaths = {};
     
-    clientExtensions.core = __dirname + '/lib/requireCore';
-   
-    clientExtensions.welder = __dirname + '/browser';
+    var welder;
+    
     var http = imports.http = require("./plugins/web.http/http.js")();
     
-    /*
-    http.app.use(function(req,res,next){
-        //var host = req.headers.host.indexOf("www.");
-        //if(host == "0"){
-            //res.redirect("//"+req.headers.host.replace("www.","")+req.originalUrl);
-        //}else
-        next();
-    });
-      */  
+    var __StaticMountPaths = [];
     function _StaticFiles(){
         var Path,mount,name;
-        for (name in staticMountPaths) {
-            Path = staticMountPaths[name].toString();
+        for (name in __StaticMountPaths) {
+            Path = __StaticMountPaths[name].toString();
             mount = name;
             addStaticMount(mount, Path,true);
         } 
-        
-        if(options.isBuild){
-            addStaticMount(staticPath,path.resolve(__dirname+"/../../build"),true);
-        }else{
-            for (name in clientExtensions) {
-                Path = clientExtensions[name].toString();
-                mount = staticPath+"/" + name;
-                
-                addStaticMount(mount, Path,true);
-            } 
-        }
     }
     function addStaticMount(mount, dir, listDirAlso){
         if(options.listDirectories || listDirAlso)
@@ -52,7 +26,6 @@ module.exports = function(options, imports, register) {
         http.app.use(mount, http.express.static(dir));
         console.log("Static Mounted",mount,"=",dir);
     }
-    
     
     var __RequestParsers = [];
     function _RequestParsers(){
@@ -83,6 +56,7 @@ module.exports = function(options, imports, register) {
         _RequestParsers();
         _Middlewares();
         
+        
         onListenRoutes(indexRoutes,pluginsInit,function(){
             callback(pluginsInit);
         });
@@ -92,120 +66,17 @@ module.exports = function(options, imports, register) {
         start:function(callback){
             this.listen(callback);
         },
-        buildClient:function(out,callback){
-            var _self = this;
-            beforeListen(function(detectedPlugins){
-                var requirejs = require('requirejs');
-                var extsList = _self.clientExtensions;
-                var includes = ["core/require"];
-                for(var i in detectedPlugins){
-                    includes.push(detectedPlugins[i].name);
-                }
-                var config = {
-                    baseUrl: clientExtensions.core,
-                    paths: {},
-                    include: includes,
-                    excludeShallow:[],
-                    name: 'welder/welder',
-                    //dir:out,
-                    out: out,
-                    logLevel: 0,
-                };
-                
-                config.onBuildRead = function(moduleName, path, contents) {
-                    console.log("reading "+moduleName,path);
-                    
-                    return contents;
-                };
-                
-                config.onBuildWrite = function(moduleName, path, contents) {
-                    console.log("writing "+moduleName,path);
-                    if(moduleName.indexOf("less") >= 1){
-                        console.log("writing "+moduleName,path);
-                    }
-                    return contents;
-                };
-            
-                //config.optimize = "none";
-                config.optimize = "uglify";
-                
-                config.optimizeAllPluginResources = true;
-                
-                for(var j in extsList){
-                    config.paths[j] = extsList[j];
-                }
-                try{
-                    requirejs.optimize(config, function(buildResponse) {
-                        var outText = fs.readFileSync(config.out, 'utf8');
-                        console.log("build done!");
-                        callback(null,buildResponse,outText);
-                    });
-                }catch(e){
-                    console.log(e);
-                }
-            });
-        },
         listen:function(callback){
             beforeListen(function(someData){
                 try{
-                    //detect node-webkit
-                    if (isNodeWebkit)
-                    {
-                        var nwIndex,gui = window.global.gui;
-                        if(options.isBuild){
-                            nwIndex = (__dirname+'/lib/startpage/nw-indexB.html').replace(window.global.appPath,"");
-                        }else{
-                            nwIndex = (__dirname+'/lib/startpage/nw-index.html').replace(window.global.appPath,"");
-                        }          
-                        var win = gui.Window.open(nwIndex);
-                        win.appConfig = window.appConfig;
-                    }else{
-                        http.listen();
-                    }
+                    http.listen();
                     callback();
                 }catch(e){
                     callback(e);
                 }
             });
         },
-        clientExtensions:clientExtensions,
-        addWelderPlugin:function(pluginDir,exports){
-            var _self = this;
-            try{
-                var clientPackage = require(pluginDir+"/package.json");
-                if(clientPackage.client && clientPackage.client.name){
-                    var client = clientPackage.client;
-                    
-                    if(client.main && client.name && client.path){
-                        var plugin = {
-                            name: (client.namespace ? client.namespace+"/" : "")+client.name+"/"+client.main
-                        };
-                        if(client.plugin && client.plugin.consumes || client.plugin.provides){
-                            plugin.consumes = client.plugin.consumes;
-                            plugin.provides = client.plugin.provides;
-                        }
-                        
-                        _self.addPlugin(plugin);
-                        
-                        if(client.routes)
-                            _self.addRoute(client.routes);
-                            
-                        clientExtensions[(client.namespace ? client.namespace+"/" : "")+client.name] = path.resolve(pluginDir,client.path);
-                    }
-                    
-                }
-                return;
-            }catch(e){
-                console.log(e);
-            }
-        },
-        addPlugin:function(clientExtPath){
-            if(typeof clientExtPath == "string")
-                pluginsInit.push({name:clientExtPath});
-            else if(typeof clientExtPath == "object")
-                pluginsInit.push(clientExtPath);
-        },
-        addStaticMount:function(mount,dir,listDirAlso){
+        addStatic:function(mount,dir,listDirAlso){
             if(options.listDirectories || listDirAlso)
                 http.app.use(mount, http.express.directory(dir));
             

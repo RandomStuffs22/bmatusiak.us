@@ -2,7 +2,7 @@
 
 module.exports = function(options, imports, register) {
     var mongoose = require('mongoose');
-    mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://oniodev:8a9s8d4968ga6sd84@ds047057.mongolab.com:47057/onio_dev');
+    mongoose.connect(process.env.MONGOLAB_URI);
     
     var MongooseSession = require("./mongooseSession.js")(mongoose,mongoose.Schema)
     var MongoosePlugin = {

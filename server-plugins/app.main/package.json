@@ -14,17 +14,5 @@
             "db-mongoose-session",
             "db-mongoose-counter"
         ]
-    },
-    "client":{
-        "name": "main",
-        "version": "0.0.1",
-        "path":"./client",
-        "main": "main",
-        "namespace":"ext",
-        "plugin":{
-            "provides":[
-                "main"
-            ]
-        }
     }
 }

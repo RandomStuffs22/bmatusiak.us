@@ -14,5 +14,6 @@ results
 npm-debug.log
 .c9revisions/
 NoPackage/
+.NoPackage/
 build/client.js
 node_modules/

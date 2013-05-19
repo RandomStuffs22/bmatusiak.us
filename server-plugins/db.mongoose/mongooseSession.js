@@ -30,7 +30,8 @@ module.exports = function(Mongoose, Schema) {
             index: true
         }
     });
-    Session = Mongoose.model('Session', SessionSchema);
+    var SessionCollection = 'Session';
+    Session = Mongoose.model(SessionCollection, SessionSchema);
     defaultCallback = function(err) {};
     _SessionStore = (function() {
         __extends(SessionStore, require('express/node_modules/connect').session.Store);
@@ -61,6 +62,7 @@ module.exports = function(Mongoose, Schema) {
             }), options.interval);
         }
         SessionStore.prototype.SessionSchema = SessionSchema;
+        SessionStore.prototype.SessionCollection = SessionCollection;
         SessionStore.prototype.get = function(sid, cb,callbackType) {
             if (cb === null) {
                 cb = defaultCallback;

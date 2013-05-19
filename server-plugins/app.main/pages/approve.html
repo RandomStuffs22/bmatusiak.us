@@ -1,0 +1,81 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="/static/bootstrap/bootstrap.css">
+        <style type="text/css">
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+            .sidebar-nav {
+                padding: 9px 0;
+            }
+            @media(max-width: 980px) {
+                /* Enable use of floated navbar text */
+                .navbar-text.pull-right {
+                    float: none;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                }
+            }
+        </style>
+        <link href="/static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <script src="/static/jquery.js"></script>
+        <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+    
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+            
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            </a>
+                            
+                <a class="brand" href="/">API Console</a>
+                
+                <div class="nav-collapse collapse" id="main-menu">
+                    <ul class="nav pull-right">
+                        <% if(!user){ %>
+                            <li>
+                                <a href="/auth/google">Login</a>
+                            </li>
+                        <% }else{ %>
+                            <li>
+                                <a href="/logout">Logout</a>
+                            </li>
+                        <% } %>
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        
+        <div class="row">
+            <div class="span8 offset2">
+                
+                <div class="well">
+                    <% if(app){ %>
+                        <h1><%- app.name %></h1>
+                        This app wants to access your account...
+                        <br />
+                        <br />
+                        <br />
+                        <div class="pull-right">
+                            <form method="post" action="<%- authorize_url %>">
+                                <button class="btn" name="allow">Allow</button>
+                                <button class="btn" name="deny">Deny</button>
+                            </form>
+                        </div>
+                        <br class="clearfix" />
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
