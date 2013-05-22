@@ -1,0 +1,67 @@
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<link rel="stylesheet" type="text/css" href="/static/bootstrap/bootstrap.css">
+
+<style type="text/css"> 
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+.sidebar-nav {
+    padding: 9px 0;
+}
+@media(max-width: 980px) {
+    /* Enable use of floated navbar text */
+    .navbar-text.pull-right {
+        float: none;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+.twitter-timeline{
+    width:100%;    
+}
+</style> 
+
+<link href="/static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"> 
+
+<script src="/static/jquery.js"></script> <script src="/static/bootstrap/js/bootstrap.min.js"></script> 
+
+<script> 
+    $(function() {
+        $.get('/static/termData.txt', function(data) {
+            var currentTermItem=0;
+            var termData=data.split("\n");
+            setInterval(function() {
+                while(($("#underLayer")[0].scrollHeight) > $("#underLayer").height()) {
+                    $($("#underLayer div")[0]).remove();
+                }
+                //console.log($("#underLayer").height(), $("#underLayer")[0].scrollHeight);
+                $("#underLayer").append("<div>"+termData[currentTermItem]+"</div>");
+                if(currentTermItem >=termData.length) currentTermItem=0;
+                else currentTermItem++;
+            }, 450);
+        });
+    });
+
+</script> 
+<style> 
+body {
+    color:white;
+    background-color:black;
+}
+#underLayer {
+    background-color:black;
+    color:green;
+    position:fixed;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    z-index: -1;
+    overflow:hidden;
+    font-family:'Press Start 2P', cursive;
+    font-size: 10px;
+    line-height: 10px;
+}
+</style> 

@@ -1,14 +1,11 @@
 "use strict";
-var path = require("path");
-var fs = require("fs");
-
-var isNodeWebkit = (typeof process == "object") && process.versions && process.versions['node-webkit'];
-                    
 module.exports = function(options, imports, register) {
     
     var welder;
     
     var http = imports.http = require("./plugins/web.http/http.js")();
+    //compress everything
+    http.app.use(http.express.compress());
     
     var __StaticMountPaths = [];
     function _StaticFiles(){

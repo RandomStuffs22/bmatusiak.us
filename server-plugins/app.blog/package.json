@@ -1,0 +1,17 @@
+{
+    "name": "app.blog",
+    "version": "0.0.1",
+
+    "main": "./blog.js",
+
+    "plugin": {
+        "provides": [
+            "blog"
+        ],
+        "consumes":[
+            "main",
+            "helpers",
+            "db-mongoose"
+        ]
+    }
+}

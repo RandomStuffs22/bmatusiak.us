@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="row">
+        <div class="span8 offset1">
+        <% if(!user){ %>
+        
+        <div class="well" id="about">
+            <h4>Blog Post Head</h4>
+            <hr />
+            <p>Mr. Bradley Matusiak is a Javascript Developer inspired to help build 
+                the new online i/o world. Brad was born in December of 1986. He lives in Saint Augustine, Florida. 
+                Brad has worked in the Web community since he was 15 years old and 
+                he uses many technoligies in his software like Node.js and HTML5. 
+                Brad spends his time working on his own ideas at home, while spending time with his family. 
+                He use to work at <a href="http://sapip.com/">PIP Printing</a>, but in 2011 he decided to start living his dream as a web developer.
+            </p>
+            
+            <div class="clearfix"></div>
+        </div>
+        
+        <% }else{ %>
+            <div class="well" style="text-align:center;">
+                <%- JSON.stringify(user) %>
+            </div>
+        <% } %>
+        </div>
+        <div class="span2 offset1">
+            <div class="well well-small" id="about">
+                <h4>Blog Post Head</h4>
+                <hr />
+                <p>Mr. Bradley Matusiak is a Javascript Developer inspired to help build 
+                    the new online i/o world. Brad was born in December of 1986. He lives in Saint Augustine, Florida. 
+                    Brad has worked in the Web community since he was 15 years old and 
+                    he uses many technoligies in his software like Node.js and HTML5. 
+                    Brad spends his time working on his own ideas at home, while spending time with his family. 
+                    He use to work at <a href="http://sapip.com/">PIP Printing</a>, but in 2011 he decided to start living his dream as a web developer.
+                    
+                </p>
+                
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,7 +3,7 @@
 module.exports = function(options, imports, everyauth) {
     
     var db = imports["db-mongoose"];
-    var counter = require("./counter.js")(options, imports);
+    var counter = imports["db-mongoose-counter"].main;
     var Schema = db.Schema;
     
     //OpenAuth Service Database Model

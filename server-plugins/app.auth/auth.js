@@ -1,4 +1,6 @@
-module.exports = function($options, imports) {
+"use strict";
+
+module.exports = function(options, imports, register) {
     
     process.env.C9_PID = false;
     
@@ -9,20 +11,14 @@ module.exports = function($options, imports) {
         domainAPI = "project-livec95eb045a2d0.rhcloud.com";
     }
 
-    
-    var fs = require("fs");
-    var ejs = require("ejs");
-
     var crypto = require('crypto');
     var md5 = function(test) {
         return crypto.createHash('md5').update(test).digest("hex");
     };
-
-    var pagesDir = __dirname + "/pages";
-
+    
     var everyauth = require('everyauth');
 
-    var users = require("./models/users.js")($options, imports);
+    var users = require("./models/users.js")(options, imports);
     
     everyauth.everymodule.handleLogout(function(req, res) {
         req.logout();
@@ -96,33 +92,14 @@ module.exports = function($options, imports) {
       //return usersById[authUserMetadata.id] = authUserMetadata;
     })
     .redirectPath('/');
-    
-
-    return function(http) {
+        
+    imports.welder.addRequestParser(function(http) {
         http.app.use(everyauth.middleware());
-        http.app.get('/', function(req, res, next) {
-            var renderObject = {
-                user: req.user
-            };
+    });
+    
+    
+    register(null, {
+        "auth": {}
+    });
 
-            done();
-
-            function done() {
-                res.writeHead(200, {
-                    'Content-Type': 'text/html'
-                });
-                fs.readFile(pagesDir + "/index.html", function(err, data) {
-                    try {
-                        res.end(
-                        ejs.render(
-                        data.toString(),
-                        renderObject));
-                    }
-                    catch (e) {
-                        res.end(e.toString())
-                    }
-                });
-            }
-        });
-    };
 };

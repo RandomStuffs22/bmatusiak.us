@@ -1,0 +1,12 @@
+{
+    "name": "app.helpers",
+    "version": "0.0.1",
+
+    "main": "./helpers.js",
+
+    "plugin": {
+        "provides": [
+            "helpers"
+        ]
+    }
+}

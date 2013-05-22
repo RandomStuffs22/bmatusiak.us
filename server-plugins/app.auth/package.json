@@ -1,20 +1,20 @@
 {
-    "name": "app.main",
+    "name": "app.auth",
     "version": "0.0.1",
 
-    "main": "./main.js",
+    "main": "./auth.js",
 
     "plugin": {
         "provides": [
-            "main"
+            "auth"
         ],
         "consumes":[
             "welder",
+            "session",
             "db-mongoose",
             "db-mongoose-session",
             "db-mongoose-counter",
-            "helpers",
-            "auth"
+            "helpers"
         ]
     }
 }

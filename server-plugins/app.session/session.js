@@ -1,8 +1,7 @@
-
-module.exports = function(options,imports){
+module.exports = function(options,imports,register){
     var MongooseSession = imports["db-mongoose-session"];
     
-    return function(http){
+    imports.welder.addRequestParser(function(http){
          http.app.use(http.express.session(
             {
                 key: 'onio.id',   
@@ -15,5 +14,9 @@ module.exports = function(options,imports){
                 }
             }
         ));
-    };
+    });
+    
+     register(null, {
+        "session": {}
+    });
 };

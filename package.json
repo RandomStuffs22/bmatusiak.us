@@ -6,7 +6,8 @@
         "architect": "0.1.8",
         "mongoose": "3.5.3",
         "everyauth" : "https://github.com/bmatusiak/everyauth/tarball/master",
-        "ejs":"*"
+        "ejs":"*",
+        "mongoose-paginate":"*"
     },
     "engines": {
         "node": "0.8.x",

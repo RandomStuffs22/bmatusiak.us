@@ -25,5 +25,11 @@ module.exports = function(db){
         });
     };
     
+    getNextCount.main = function(callback){
+        getNextCount("mainCouter",9874563210,function(Err,counter){
+            callback(counter.count);
+        });
+    };
+    
     return getNextCount;
 };

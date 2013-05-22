@@ -1,0 +1,64 @@
+<div class="container">
+    <div class="row">
+        <div class="span8 offset2">
+            <% if(!user){ %>
+                <div class="well" id="about">
+                    <h4>Who is Bradley Matusiak?</h4>
+                    <hr />
+                    <img src="https://si0.twimg.com/profile_images/3132857370/715ee54591fa23477defa044863fa291.jpeg" style="margin-left: 20px;" class="pull-right" width="100" height="100" alt="" />
+                    <p>Mr. Bradley Matusiak is a Javascript Developer inspired to help build 
+                    the new online i/o world. Brad was born in December of 1986. He lives in Saint Augustine, Florida. 
+                        Brad has worked in the Web community since he was 15 years old and 
+                        he uses many technoligies in his software like Node.js and HTML5. 
+                        Brad spends his time working on his own ideas at home, while spending time with his family. 
+                        He use to work at <a href="http://sapip.com/">PIP Printing</a>, but in 2011 he decided to start living his dream as a web developer.
+                        
+                    </p>
+                    
+                    <div class="clearfix"></div>
+                </div>
+                <div class="row-fluid">
+                        
+                    <div class="span6">
+                        <div class="well">
+                            <h4>Some Music to Enjoy</h4>
+                            <hr />
+                            <iframe width="420" style="width: 100%;" height="80" src="http://www.youtube-nocookie.com/embed/OAVEDh6C8VM?autoplay=0"></iframe>
+                        </div>
+                        <div class="well" id="projects">
+                            <h4>Brad's Projects</h4>
+                            <hr />
+                            Currently working on.
+                            <ul>
+                                <li><a href="http://mygrid.herokuapp.com/">MyGrid</a> - Facebook Game</li>
+                                <li><a href="http://c9.io/">Cloud9ide imgEditor</a> - Basic Image Editor for Cloud9</li>
+                            </ul>
+                            See his <a href="http://github.com/bmatusiak">github.com account</a> to see what he contributed to.<br /><br />
+                            <iframe src="http://githubbadge.appspot.com/badge/bmatusiak?a=0" style="border: 0;height: 142px;width: 100%;overflow: hidden;"></iframe>
+                        </div>
+                    </div>
+                        
+                    <div class="span6" id="social">
+                        <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/bradleymatusiak" data-widget-id="305044946342248448">Tweets by @bradleymatusiak</a>
+                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                    </div>
+                </div>
+                <div class="well" id="contact">
+                    <h4>Get in contact with Brad</h4>
+                    <hr />Here are some ways to get in contact with Brad.
+                    <ul>
+                        <li>Email: <a href="mailto:brad@bmatusiak.us">brad @ bmatusiak.us</a></li>
+                        <li>Phone: +1 (904) 827-7848</li>
+                        <li>Twitter: @bradleymatusiak</li>
+                        <li>Facebook: bmatusiak86</li>
+                        
+                    </ul>
+                </div>
+            <% }else{ %>
+                <div class="well" style="text-align:center;">
+                    <%- JSON.stringify(user) %>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
