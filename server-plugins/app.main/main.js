@@ -55,6 +55,19 @@ module.exports = function(options, imports, register) {
                 });
             }
         });
+        http.app.get('/robots.txt', function(req, res, next) {
+            done();
+    
+            function done() {
+                res.writeHead(200, {
+                    'Content-Type': 'text/plain'
+                });
+                exports.ejs._render("<%- ROBOTS() %>", {},function(data){
+                    res.end(data);
+                });
+            }
+        });
+        
     });
     
     imports.welder.addStatic("/static",__dirname+"/static",true);
