@@ -1,42 +1,76 @@
+<script>
+    var editPost = (function(){
+        
+        
+        
+        return function(postID){
+            
+        };
+    })();
+</script>
 <div class="container">
     <div class="row">
-        <div class="span8 offset1">
-        <% if(!user){ %>
-        
-        <div class="well" id="about">
-            <h4>Blog Post Head</h4>
-            <hr />
-            <p>Mr. Bradley Matusiak is a Javascript Developer inspired to help build 
-                the new online i/o world. Brad was born in December of 1986. He lives in Saint Augustine, Florida. 
-                Brad has worked in the Web community since he was 15 years old and 
-                he uses many technoligies in his software like Node.js and HTML5. 
-                Brad spends his time working on his own ideas at home, while spending time with his family. 
-                He use to work at <a href="http://sapip.com/">PIP Printing</a>, but in 2011 he decided to start living his dream as a web developer.
-            </p>
-            
-            <div class="clearfix"></div>
-        </div>
-        
-        <% }else{ %>
+        <div class="span8 offset2">
             <div class="well" style="text-align:center;">
-                <%- JSON.stringify(user) %>
+                <h4>Brad's Official Blog</h4>
+                <% if(user){ %>
+                    <hr />
+                    <div style="text-align:center;">
+                        <a class="btn btn-primary" data-toggle="modal" href="#myModal">New Post</a>
+                    </div>
+                <% } %>
             </div>
-        <% } %>
-        </div>
-        <div class="span2 offset1">
-            <div class="well well-small" id="about">
-                <h4>Blog Post Head</h4>
-                <hr />
-                <p>Mr. Bradley Matusiak is a Javascript Developer inspired to help build 
-                    the new online i/o world. Brad was born in December of 1986. He lives in Saint Augustine, Florida. 
-                    Brad has worked in the Web community since he was 15 years old and 
-                    he uses many technoligies in his software like Node.js and HTML5. 
-                    Brad spends his time working on his own ideas at home, while spending time with his family. 
-                    He use to work at <a href="http://sapip.com/">PIP Printing</a>, but in 2011 he decided to start living his dream as a web developer.
-                    
-                </p>
-                
-                <div class="clearfix"></div>
+            <div id="posts">
+            
+                <div id="post-1" class="well" >
+                    <div class="row-fluid">
+                        <h4 id="post-title-1">Blog Post Head</h4>
+                        <hr />
+                        <div id="post-body-1">
+                            Mr. Bradley Matusiak is a Javascript Developer inspired to help build 
+                            the new online i/o world. Brad was born in December of 1986. He lives in Saint Augustine, Florida. 
+                            Brad has worked in the Web community since he was 15 years old and 
+                            he uses many technoligies in his software like Node.js and HTML5. 
+                            Brad spends his time working on his own ideas at home, while spending time with his family. 
+                            He use to work at <a href="http://sapip.com/">PIP Printing</a>, but in 2011 he decided to start living his dream as a web developer.
+                        </div>
+                        
+                        <% if(user){ %>
+                        <hr />
+                        <div style="text-align:center;">
+                            <a class="btn btn-primary" href="#">Remove</a>
+                            <a class="btn btn-primary" data-toggle="modal" href="#myModal" onclick="editPost('1')">Edit</a>
+                        </div>
+                        <% } %>
+                        
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="well" id="more" style="text-align:center;">
+                <a class="btn btn-primary" href="/blog">More</a>
+            </div>
+            <!-- Modal -->
+            <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove icon-white"></i></button>
+                <h3 id="myModalLabel">Post</h3>
+              </div>
+              <div class="modal-body">
+                <div id="post" class="row-fluid">
+                    <input type="text" placeholder="Post Title" class="span12" onchange="$('#post-preview-title').text(this.value)" onkeyup="this.onchange()">
+                    <textarea rows="10" placeholder="Post Body" class="span12" style="color:black;" onchange="$('#post-preview-body').html(window.marked(this.value))"  onkeyup="this.onchange()"></textarea>
+                </div>
+                <div id="post-preview" class="row-fluid">
+                    <h4 id="post-preview-title"></h4>
+                    <hr />
+                    <div id="post-preview-body"></div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button class="btn btn-primary">Post</button>
+              </div>
             </div>
         </div>
     </div>

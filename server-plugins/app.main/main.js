@@ -19,8 +19,11 @@ module.exports = function(options, imports, register) {
                 options.pageTitle = "bmatusiak.us";
                 self.ejs._render("<%- "+self.docTYPE+"() %>", options, callback);
             });
-            
-        }
+        },
+        renderSITEMAP: function(options,callback){
+            var self = this;
+            self.ejs._render("<%- SITEMAP() %>", options, callback);
+        },
     };
     
     imports.welder.addRequestParser(function(http){
@@ -36,6 +39,18 @@ module.exports = function(options, imports, register) {
                     'Content-Type': 'text/html'
                 });
                 exports.renderHTML(pagesDir + "/body.html",renderObject,function(data){
+                    res.end(data);
+                });
+            }
+        });
+        http.app.get('/sitemap', function(req, res, next) {
+            done();
+    
+            function done() {
+                res.writeHead(200, {
+                    'Content-Type': 'text/xml'
+                });
+                exports.renderSITEMAP({},function(data){
                     res.end(data);
                 });
             }

@@ -47,14 +47,20 @@ module.exports = function(options, imports) {
             if(!err && !$blog){
                 return callback("notfound");
             }else if(!err && $blog !== null){
-                $blog.remove();
-                return callback(null);
+                for(var i in obj){
+                    $blog[i] = obj[i];
+                }
+                $blog.save(callback);
             }
         });
     };
     
-    var newBlog = function(obj){
-        
+    var newBlog = function(obj,callback){
+        var $blog = new blog();
+        for(var i in obj){
+            $blog[i] = obj[i];
+        }
+        $blog.save(callback);
     };
     
     var removeBlog = function(id,callback){
@@ -63,14 +69,13 @@ module.exports = function(options, imports) {
                 return callback("notfound");
             }else if(!err && $blog !== null){
                 $blog.remove();
-                return callback(null);
+                $blog.save(callback);
             }
         });
         
     };
     
     var blogPage = function(page,length,callback){
-        
         blog.paginate({}, page,length, callback);
     };
     

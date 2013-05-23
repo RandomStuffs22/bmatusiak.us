@@ -23,6 +23,22 @@ module.exports = function(options, imports, register) {
                 });
             }
         });
+        http.app.post('/blog', function(req, res, next) {
+            if(req.body.action)
+            switch(req.body.action){
+                case "new":
+                    break;
+                case "update":
+                    break;
+                case "remove":
+                    break;
+                default:
+                    res.redirect("/blog");
+                    break;
+            }
+            else
+            res.redirect("/blog");
+        });
     });
     
     register(null, {

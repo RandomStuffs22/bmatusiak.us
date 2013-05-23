@@ -1,6 +1,6 @@
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 
-<link rel="stylesheet" type="text/css" href="/static/bootstrap/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.css">
 
 <style type="text/css"> 
 body {
@@ -44,7 +44,8 @@ body {
 
 <link href="/static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"> 
 
-<script src="/static/jquery.js"></script> <script src="/static/bootstrap/js/bootstrap.min.js"></script> 
+<script src="/static/jquery.js"></script> 
+<script src="/static/bootstrap/js/bootstrap.min.js"></script> 
 
 <script> 
     $(function() {
@@ -63,4 +64,31 @@ body {
         });
     });
 
+</script>
+
+<link rel="stylesheet" type="text/css" href="/static/marked/default-style.css">
+<link rel="stylesheet" type="text/css" href="/static/marked/style.css">
+<script src="/static/marked/marked.js"></script> 
+<script src="/static/marked/highlight.js"></script> 
+<script>
+    // Set default options
+    window.marked.setOptions({
+      gfm: true,
+      tables: true,
+      breaks: false,
+      pedantic: false,
+      sanitize: true,
+      smartLists: true,
+      langPrefix: 'language-',
+      highlight: function(code, lang) {
+          //shortcuts
+          if(lang === 'js') lang = 'javascript';
+          
+        if (window.hljs.LANGUAGES[lang]) {
+          return window.hljs.highlight(lang, code).value;
+        }
+        return code;
+      }
+    });
+    //console.log(window.marked('i am using __markdown__.'));
 </script>
