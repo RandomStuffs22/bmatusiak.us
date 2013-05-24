@@ -79,7 +79,7 @@ module.exports = function(options, imports, register) {
                             title:req.body.title,
                             author:req.user.id
                         },function(err,blog){
-                            res.redirect("/blog");
+                            res.redirect("/blog/"+blog._id);
                         });
                         break;
                     case "edit":
@@ -88,10 +88,14 @@ module.exports = function(options, imports, register) {
                             title:req.body.title,
                             author:req.user.id
                         },function(err,blog){
-                            res.redirect("/blog");
+                            res.redirect("/blog/"+blog._id);
                         });
                         break;
                     case "remove":
+                        blogDB.removeBlog(req.body.blogid,
+                        function(err,blog){
+                            res.redirect("/blog");
+                        });
                         break;
                     default:
                         res.redirect("/blog");
