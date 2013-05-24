@@ -77,7 +77,7 @@ module.exports = function(options, imports, register) {
                         blogDB.newBlog({
                             body:req.body.body,
                             title:req.body.title,
-                            author:req.user.id
+                            author:req.user.email
                         },function(err,blog){
                             res.redirect("/blog/"+blog._id);
                         });
