@@ -1,9 +1,8 @@
 "use strict";
 
 module.exports = function(options, imports) {
+    var exports = {};
     
-    var paginate = require('mongoose-paginate');
-
     var db = imports["db-mongoose"];
     
     var Schema = db.Schema;
@@ -27,11 +26,11 @@ module.exports = function(options, imports) {
         }
     });
     
-    var blogCollection = "appService";
+    var blogCollection = "blog";
     
     var blog = db.model(blogCollection, blogSchema);
     
-    var getBlog = function(id,callback){
+    var getBlog = exports.getBlog = function(id,callback){
         blog.findOne({_id: id}, function(err,$blog){
             if(!err && !$blog){
                 return callback("notfound");
@@ -42,7 +41,7 @@ module.exports = function(options, imports) {
 
     };
     
-    var updateBlog = function(id,obj,callback){
+    var updateBlog = exports.updateBlog = function(id,obj,callback){
         getBlog(id, function(err,$blog){
             if(!err && !$blog){
                 return callback("notfound");
@@ -55,7 +54,7 @@ module.exports = function(options, imports) {
         });
     };
     
-    var newBlog = function(obj,callback){
+    var newBlog = exports.newBlog = function(obj,callback){
         var $blog = new blog();
         for(var i in obj){
             $blog[i] = obj[i];
@@ -63,7 +62,7 @@ module.exports = function(options, imports) {
         $blog.save(callback);
     };
     
-    var removeBlog = function(id,callback){
+    var removeBlog = exports.removeBlog = function(id,callback){
         getBlog(id, function(err,$blog){
             if(!err && !$blog){
                 return callback("notfound");
@@ -75,10 +74,23 @@ module.exports = function(options, imports) {
         
     };
     
-    var blogPage = function(page,length,callback){
-        blog.paginate({}, page,length, callback);
+    var blogPage = exports.blogPage = function(page,perPage,callback){
+        blog.find({})
+        .limit(perPage)
+        .skip(perPage * page)
+        //.sort({date: 'asc'})
+        .exec(function(err, blogs) {
+            blog.count().exec(function(err, count) {
+                callback(null,{
+                    results: blogs.reverse(),
+                    page: page,
+                    pages: count / perPage
+                });
+                
+            });
+        });
     };
     
-    return {};
+    return exports;
 };
 

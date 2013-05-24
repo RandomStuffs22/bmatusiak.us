@@ -72,23 +72,24 @@ body {
 <script src="/static/marked/highlight.js"></script> 
 <script>
     // Set default options
-    window.marked.setOptions({
-      gfm: true,
-      tables: true,
-      breaks: false,
-      pedantic: false,
-      sanitize: true,
-      smartLists: true,
-      langPrefix: 'language-',
-      highlight: function(code, lang) {
-          //shortcuts
-          if(lang === 'js') lang = 'javascript';
-          
-        if (window.hljs.LANGUAGES[lang]) {
-          return window.hljs.highlight(lang, code).value;
+    window.marked.setOptions( {
+        gfm: true, 
+        tables: true, 
+        breaks: false, 
+        pedantic: false, 
+        sanitize: true, 
+        smartLists: true, 
+        langPrefix:'language-', 
+        highlight: function(code, lang) {
+            //shortcuts 
+            if(lang==='js') lang='javascript';
+            
+            if(window.hljs.LANGUAGES[lang]) {
+                return window.hljs.highlight(lang, code).value;
+            }
+            return code;
         }
-        return code;
-      }
-    });
+    }
+    );
     //console.log(window.marked('i am using __markdown__.'));
 </script>

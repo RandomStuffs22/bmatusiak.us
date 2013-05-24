@@ -1,13 +1,42 @@
 <script>
-    var editPost = (function(){
-        
-        
-        
-        return function(postID){
+    $(function(){
+        var posts = $(".singlePost");
+        for(var i in posts){
+            var post = $(posts[i]);
+            var body = post.find(".post-body");
+            var parsed = window.marked(body.html());
+            post.find(".post-view").html(parsed);
+            body.hide();
+        }
+    });
+    var editPost = function(postID){
+        var post;
+        var postsEditor;
+        if(postID != "new"){
+            postsEditor = $("#blogModaledit").find("#post");
+            post = $("#post-"+postID);
+            postsEditor.find("input[name='title']").attr("value",post.find(".post-title").text());
+            postsEditor.find("textarea").text(post.find(".post-body").html());
+            $("#blogModaledit").find('#post-preview-title').text(postsEditor.find("input")[0].value);
+            $("#blogModaledit").find('#post-preview-body').html(window.marked(postsEditor.find("textarea")[0].value));
             
-        };
-    })();
+            $("#blogModaledit").find("input[name='blogid']").attr("value",postID);
+        }else{
+            postsEditor = $("#blogModalnew").find("#post");
+            postsEditor.find("input").attr("value","");
+            postsEditor.find("textarea").text("");
+            $("#blogModalnew").find('#post-preview-title').text("");
+            $("#blogModalnew").find('#post-preview-body').html("");
+        }
+    };
 </script>
+<style>
+#blogModaledit,#blogModalnew{
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+}
+</style>
 <div class="container">
     <div class="row">
         <div class="span8 offset2">
@@ -16,62 +45,78 @@
                 <% if(user){ %>
                     <hr />
                     <div style="text-align:center;">
-                        <a class="btn btn-primary" data-toggle="modal" href="#myModal">New Post</a>
+                        <a class="btn btn-primary" data-toggle="modal" href="#blogModalnew" onclick="editPost('new')">New Post</a>
                     </div>
                 <% } %>
             </div>
             <div id="posts">
-            
-                <div id="post-1" class="well" >
-                    <div class="row-fluid">
-                        <h4 id="post-title-1">Blog Post Head</h4>
-                        <hr />
-                        <div id="post-body-1">
-                            Mr. Bradley Matusiak is a Javascript Developer inspired to help build 
-                            the new online i/o world. Brad was born in December of 1986. He lives in Saint Augustine, Florida. 
-                            Brad has worked in the Web community since he was 15 years old and 
-                            he uses many technoligies in his software like Node.js and HTML5. 
-                            Brad spends his time working on his own ideas at home, while spending time with his family. 
-                            He use to work at <a href="http://sapip.com/">PIP Printing</a>, but in 2011 he decided to start living his dream as a web developer.
+                <% for(var i in blogItems){ %>
+                    <div id="post-<%- blogItems[i]._id %>" class="well singlePost" >
+                        <div class="row-fluid">
+                            <h4 class="post-title"><a href="/blog/<%- blogItems[i]._id %>"><%- blogItems[i].title %></a></h4>
+                            <hr />
+                            <div class="post-body"><%- blogItems[i].body %></div>
+                            <div class="post-view"></div>
+                            
+                            <% if(user){ %>
+                            <hr />
+                            <div style="text-align:center;">
+                                <a class="btn btn-primary" data-toggle="modal" href="#blogModaledit" onclick="editPost('<%- blogItems[i]._id %>')">Edit</a>
+                            </div>
+                            <% } %>
+                            
+                            <div class="clearfix"></div>
                         </div>
-                        
-                        <% if(user){ %>
-                        <hr />
-                        <div style="text-align:center;">
-                            <a class="btn btn-primary" href="#">Remove</a>
-                            <a class="btn btn-primary" data-toggle="modal" href="#myModal" onclick="editPost('1')">Edit</a>
-                        </div>
-                        <% } %>
-                        
-                        <div class="clearfix"></div>
                     </div>
-                </div>
+                <% } %>
             </div>
+            <% if(nextBlogPage){ %>
             <div class="well" id="more" style="text-align:center;">
-                <a class="btn btn-primary" href="/blog">More</a>
+                <a class="btn btn-primary" href="/blog?page=<%- nextBlogPage %>">More</a>
             </div>
-            <!-- Modal -->
-            <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon-remove icon-white"></i></button>
-                <h3 id="myModalLabel">Post</h3>
-              </div>
-              <div class="modal-body">
-                <div id="post" class="row-fluid">
-                    <input type="text" placeholder="Post Title" class="span12" onchange="$('#post-preview-title').text(this.value)" onkeyup="this.onchange()">
-                    <textarea rows="10" placeholder="Post Body" class="span12" style="color:black;" onchange="$('#post-preview-body').html(window.marked(this.value))"  onkeyup="this.onchange()"></textarea>
-                </div>
-                <div id="post-preview" class="row-fluid">
-                    <h4 id="post-preview-title"></h4>
-                    <hr />
-                    <div id="post-preview-body"></div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                <button class="btn btn-primary">Post</button>
-              </div>
-            </div>
+            <% } %>
         </div>
     </div>
 </div>
+
+<!-- Modals Generator  type = 1 = edit -->
+<% var makeModal = function(type){  %>
+
+<div id="blogModal<%- type %>" class="modal hide fade row span8" tabindex="-1" role="dialog" aria-labelledby="blogModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <form name="postedit" action="/blog" method="post">
+        <a href="#" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="icon-remove icon-white"></i>
+        </a>
+        <% if(type == "edit"){ %>
+            <h3 id="blogModalLabel">Edit Post</h3>
+        <% }else{ %>
+            <h3 id="blogModalLabel">New Post</h3>
+        <% } %>
+        <input name="action" value="<%- type %>" type="hidden">
+        <input name="blogid" value="" type="hidden">
+    </div>
+    <div class="modal-body">
+        <div id="post" class="row-fluid">
+            <input name="title" type="text" placeholder="Post Title" class="span12" onchange="$('#blogModal<%- type %>').find('#post-preview-title').text(this.value)" onkeyup="this.onchange()">
+            <textarea name="body" rows="10" placeholder="Post Body" class="span12" style="color:black;" onchange="$('#blogModal<%- type %>').find('#post-preview-body').html(window.marked(this.value))" onkeyup="this.onchange()"></textarea>
+        </div>
+        <div id="post-preview" class="row-fluid">
+            <h4 id="post-preview-title"></h4>
+            <hr />
+            <div id="post-preview-body"></div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <% if(type == "edit"){ %>
+            <button name="remove" value="true" class="btn btn-primary pull-left" href="#">Remove</button>
+        <% } %>
+        <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
+        <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+<% };
+makeModal('new');makeModal('edit')
+%>
