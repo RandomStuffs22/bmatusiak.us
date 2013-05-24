@@ -13,14 +13,19 @@ module.exports = function(options, imports, register) {
             };
             
             var page = req.query.page-1 || 0;
-            var limit = req.query.limit || 10;
+            var limit = req.query.limit || 3;
             
             blogDB.blogPage(page,limit,function(err,blogs){
                 renderObject.blogItems = blogs.results;
                 
-                if(blogs.pages >= 1){
+                if(blogs.pages >= parseInt(blogs.pages))
+                    blogs.pages = parseInt(blogs.pages)+1;
+                else
+                    blogs.pages = parseInt(blogs.pages);
+                
+                if(blogs.pages >= 1 && blogs.pages != page+1){
                     renderObject.blogPages = blogs.pages;
-                    renderObject.nextBlogPage = page+1;
+                    renderObject.nextBlogPage = page+2;
                 } else {
                     renderObject.blogPages = 1;
                     renderObject.nextBlogPage = 0;
