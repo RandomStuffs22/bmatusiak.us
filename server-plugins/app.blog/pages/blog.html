@@ -1,13 +1,13 @@
 <script>
     $(function(){
-        var posts = $(".singlePost");
+        /*var posts = $(".singlePost");
         for(var i in posts){
             var post = $(posts[i]);
             var body = post.find(".post-body");
-            var parsed = window.marked(body.html());
+            var parsed = window.marked(body.text());
             post.find(".post-view").html(parsed);
             body.hide();
-        }
+        }*/
     });
     var editPost = function(postID){
         var post;
@@ -15,10 +15,15 @@
         if(postID != "new"){
             postsEditor = $("#blogModaledit").find("#post");
             post = $("#post-"+postID);
+            
             postsEditor.find("input[name='title']").attr("value",post.find(".post-title").text());
-            postsEditor.find("textarea").text(post.find(".post-body").html());
+            $.get('/blog/'+postID+"?raw=1", function(data) {
+                postsEditor.find("textarea").text(data);
+                $("#blogModaledit").find('#post-preview-body').html(window.marked(postsEditor.find("textarea")[0].value));
+            });
+            
             $("#blogModaledit").find('#post-preview-title').text(postsEditor.find("input")[0].value);
-            $("#blogModaledit").find('#post-preview-body').html(window.marked(postsEditor.find("textarea")[0].value));
+            //$("#blogModaledit").find('#post-preview-body').html(window.marked(postsEditor.find("textarea")[0].value));
             
             $("#blogModaledit").find("input[name='blogid']").attr("value",postID);
         }else{
@@ -50,13 +55,14 @@
                 <% } %>
             </div>
             <div id="posts">
-                <% for(var i in blogItems){ %>
+                <% for(var i in blogItems){
+                    if(blogItems[i]){
+                %>
                     <div id="post-<%- blogItems[i]._id %>" class="well singlePost" >
                         <div class="row-fluid">
                             <h4 class="post-title"><a href="/blog/<%- blogItems[i]._id %>"><%- blogItems[i].title %></a></h4>
                             <hr />
-                            <div class="post-body"><%- blogItems[i].body %></div>
-                            <div class="post-view"></div>
+                            <div class="post-view"><%- marked(blogItems[i].body) %></div>
                             By <a href="https://plus.google.com/108383164114519456696" rel="author">Bradley Matusiak</a> @ <%- blogItems[i].date.toUTCString() %>
                             <% if(user){ %>
                             <hr />
@@ -68,7 +74,7 @@
                             <div class="clearfix"></div>
                         </div>
                     </div>
-                <% } %>
+                <% }} %>
             </div>
             <% if(nextBlogPage){ %>
             <div class="well" id="more" style="text-align:center;">

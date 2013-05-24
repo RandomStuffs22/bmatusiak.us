@@ -4256,3 +4256,12 @@ hljs.LANGUAGES.css = function(a) {
         }]
     }
 }(hljs);
+
+if (typeof exports === 'object') {
+    module.exports = hljs;
+}
+else if (typeof define === 'function' && define.amd) {
+    define(function() {
+        return hljs;
+    });
+}

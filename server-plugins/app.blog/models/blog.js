@@ -78,11 +78,11 @@ module.exports = function(options, imports) {
         blog.find({})
         .limit(perPage)
         .skip(perPage * page)
-        //.sort({date: 'asc'})
+        .sort({date: 'desc'})
         .exec(function(err, blogs) {
             blog.count().exec(function(err, count) {
                 callback(null,{
-                    results: blogs.reverse(),
+                    results: blogs,
                     page: page,
                     pages: count / perPage
                 });

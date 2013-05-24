@@ -42,8 +42,19 @@ EJSfile.prototype.options = function(options) {
 
     for (var i in this.elements)
     options[i] = this.elements[i];
+    
+    for (var j in this._staticOptions)
+    options[j] = this._staticOptions[j];
 
     return options;
+};
+
+EJSfile.prototype._staticOptions = {};
+
+EJSfile.prototype.staticOption = function(name,option) {
+    if(option)
+        return this._staticOptions[name] = option;
+    else return this._staticOptions[name];
 };
 
 EJSfile.prototype.use = function(elementsDir) {

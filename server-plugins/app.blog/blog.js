@@ -59,12 +59,23 @@ module.exports = function(options, imports, register) {
             });
             
             function done() {
-                res.writeHead(200, {
-                    'Content-Type': 'text/html'
-                });
-                imports.main.renderHTML(__dirname + "/pages/blog.html",renderObject,function(data){
-                    res.end(data);
-                });
+                if(req.query.raw){
+                    res.writeHead(200, {
+                        'Content-Type': 'text/plain'
+                    });
+                    if(renderObject.blogItems[0])
+                        res.end(renderObject.blogItems[0].body);
+                    else{
+                        res.end("unknown raw blog page");
+                    }
+                }else{
+                    res.writeHead(200, {
+                        'Content-Type': 'text/html'
+                    });
+                    imports.main.renderHTML(__dirname + "/pages/blog.html",renderObject,function(data){
+                        res.end(data);
+                    });
+                }
             }
         });
         http.app.post('/blog', function(req, res, next) {

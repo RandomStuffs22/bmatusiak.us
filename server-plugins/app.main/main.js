@@ -26,6 +26,31 @@ module.exports = function(options, imports, register) {
         },
     };
     
+    var marked = require("./static/marked/marked.js");
+    var hljs = require("./static/marked/highlight.js");
+    
+    exports.ejs.staticOption("marked",marked);
+    
+    marked.setOptions( {
+        gfm: true, 
+        tables: true, 
+        breaks: false, 
+        pedantic: false, 
+        sanitize: false, 
+        smartLists: true, 
+        langPrefix:'language-', 
+        highlight: function(code, lang) {
+            //shortcuts 
+            if(lang==='js') lang='javascript';
+            
+            if(hljs.LANGUAGES[lang]) {
+                return hljs.highlight(lang, code).value;
+            }
+            return code;
+        }
+    }
+    );
+    
     imports.welder.addRequestParser(function(http){
         http.app.get('/', function(req, res, next) {
             var renderObject = {
