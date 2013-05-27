@@ -2,7 +2,7 @@
 
 module.exports = function(options, imports, register) {
     
-    process.env.C9_PID = false;
+    //process.env.C9_PID = false;
     
     var domainAPI;
     if(!process.env.C9_PID || process.env.C9_PID == "false"){
@@ -12,8 +12,11 @@ module.exports = function(options, imports, register) {
     }
 
     var crypto = require('crypto');
-    var md5 = function(test) {
-        return crypto.createHash('md5').update(test).digest("hex");
+    var md5 = function(str) {
+        return crypto.createHash('md5').update(str).digest("hex");
+    };
+    var sha256 = function(str) {
+        return crypto.createHash('sha256').update(str).digest("hex");
     };
     
     var everyauth = require('everyauth');
@@ -79,7 +82,7 @@ module.exports = function(options, imports, register) {
     
     everyauth.bmatusiak
     .appId("9874563211")
-    .appSecret("sas1sydamobknnd74o6lkzoztj4013xi")
+    .appSecret(process.env.BMATUSIAK_SECRET || "o0wfflh58bnzqumx0ekxf6fwb30a12vq")
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, authUserMetadata) {
         
         var promise = this.Promise();
