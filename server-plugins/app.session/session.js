@@ -4,7 +4,7 @@ module.exports = function(options,imports,register){
     imports.welder.addRequestParser(function(http){
          http.app.use(http.express.session(
             {
-                key: 'onio.id',   
+                key: 'bm.us.id',   
                 secret: "68a47dsf84as1fasd6as68d16fs1ad", 
                 store: MongooseSession,
                 cookie: {

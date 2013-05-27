@@ -80,9 +80,12 @@ module.exports = function(options, imports, register) {
         });
     }
     
+    var appID = process.env.BMATUSIAK_ID ||"9874563212";
+    var appSecret = process.env.BMATUSIAK_SECRET || "osjcilo0n31wpf9k4enjyonikn1e6ifk";
+    
     everyauth.bmatusiak
-    .appId("9874563211")
-    .appSecret(process.env.BMATUSIAK_SECRET || "o0wfflh58bnzqumx0ekxf6fwb30a12vq")
+    .appId(appID)
+    .appSecret(appSecret)
     .findOrCreateUser( function (session, accessToken, accessTokenExtra, authUserMetadata) {
         
         var promise = this.Promise();
