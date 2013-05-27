@@ -5,7 +5,7 @@ module.exports = function(options,imports,register){
          http.app.use(http.express.session(
             {
                 key: 'bm.us.id',   
-                secret: "68a47dsf84as1fasd6as68d16fs1ad", 
+                secret: process.env.SESSION_SECRET, 
                 store: MongooseSession,
                 cookie: {
                     path: '/',
