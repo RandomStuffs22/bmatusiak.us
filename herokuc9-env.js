@@ -1,12 +1,14 @@
-module.exports = function(done){
+module.exports = function($done){
+    var doneCalled = false;
+    function done(){
+        if(!doneCalled){
+            doneCalled = true;
+            $done();
+        }
+    }
     if(!process.env.C9_PROJECT){
         return done();
     }
-    
-    //put stuff here to set up env
-    process.env.MONGOLAB_URI = 
-        process.env.MONGOLAB_URI ||
-        "mongodb://heroku_app11001646:i1h37es0jri2havsjll1qtlbe1@ds047447.mongolab.com:47447/heroku_app11001646";
     
     var spawn = require('child_process').spawn,
     heroku = spawn(
@@ -22,8 +24,10 @@ module.exports = function(done){
       herokuOutput += data.toString();
     });
     
+    
     heroku.stderr.on('data', function (data) {
       console.log('stderr: ' + data);
+      done();
     });
     
     var herokuCONFIG = {};
@@ -44,11 +48,13 @@ module.exports = function(done){
         
         for(var j in herokuCONFIG){
             if(j !== "PATH"){
-                process.env[j] = herokuCONFIG[j];
+                if(herokuCONFIG["DEV_"+j])
+                    process.env[j] = herokuCONFIG["DEV_"+j];
+                else
+                    process.env[j] = herokuCONFIG[j];
             }
         }
         
-        console.log(herokuCONFIG);
         done();
     });
 };
